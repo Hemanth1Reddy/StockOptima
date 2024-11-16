@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockOptima - Inventory Management</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="styles.css"> <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" /> <!-- Toastr CSS -->
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script> <!-- Popper.js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> <!-- Toastr JS -->
+    
+    <!-- Include jsPDF first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include jsPDF AutoTable plugin afterwards -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js Library -->
+    <script src="app.js" defer></script> <!-- Link to external JavaScript for functionality -->
+
+    <style>
+        body {
+            padding-top: 30px; /* Space for fixed navbar */
+        }
+
+        nav {
+            margin-top: 0; /* Remove margin from top of the navbar */
+            z-index: 10; /* Ensure navbar appears above header */
+        }
+
+        .navbar {
+            border-top: 4px solid #0056b3; /* Optional: Adds a top border to the navbar for separation */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="text-center">
+        <h1>Welcome To <span>StockOptima</span></h1>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <span class="navbar-brand mb-0 h1">StockOptima</span>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#inventory">Manage Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reports">Manage Reports</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="row text-center" id="welcome">
+            <div class="col-12">
+                <p style="font-size:18px;">
+                    Optimizing your stock, one item at a time
+                    <br class="d-none d-md-block" />
+                    because who said inventory management can’t be fun?
+                </p>
+                <img src="image1.png" alt="Stock Management" width="500px" />
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="container mt-5 pt-4">
+            <h2 class="text-primary mb-4"><i class="fas fa-boxes"></i> Dashboard</h2>
+            <div class="row">
+                <!-- Stock Levels Graph -->
+                <div class="col-md-8">
+                    <canvas id="inventoryChart" width="400" height="200"></canvas>
+                </div>
+                <!-- Stock-Out Warnings -->
+                <div class="col-md-4">
+                    <h3>Stock-Out Warnings</h3>
+                    <div id="stockOutWarnings"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="inventory" class="container mb-5 mt-4">
+            <h2 class="text-primary mb-4"><i class="fas fa-boxes"></i> Manage Inventory</h2>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Add New Item</h5>
+                    <form id="addItemForm" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="itemId" class="form-label">ID Number</label>
+                            <input type="text" class="form-control" id="itemId" placeholder="Enter item ID" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="itemName" class="form-label">Item Name</label>
+                            <input type="text" class="form-control" id="itemName" placeholder="Enter item name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="itemQty" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="itemQty" placeholder="Enter quantity" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="itemPrice" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="itemPrice" placeholder="Enter price" required step="0.01">
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-primary">Add Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Current Inventory</h5>
+                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search inventory..." onkeyup="filterInventory()">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID Number</th>
+                                <th>Item Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryList">
+                            <!-- Inventory items will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <section id="reports" class="container mt-4">
+                <h2 class="text-primary mb-4"><i class="fas fa-boxes"></i> Reports</h2> <!-- Main Heading -->
+                
+                <!-- Form to create or update report -->
+                <h3 class="text-secondary mb-3">Create Report</h3> <!-- Sub Heading -->
+                <p class="text-muted">Generate and manage your inventory reports. Stay updated with the latest knowledge.</p>
+            
+                <form id="reportForm">
+                    <button id="printReportBtn" class="btn btn-info">Generate Report</button>
+                </form>
+            </section>
+        </section>
+    </main>
+
+    <!-- Update Item Modal -->
+    <div class="modal fade" id="updateItemModal" tabindex="-1" aria-labelledby="updateItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateItemModalLabel">Update Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateItemForm">
+                        <div class="form-group">
+                            <label for="updateItemId">Item ID:</label>
+                            <input type="text" id="updateItemId" class="form-control" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateItemName">Item Name:</label>
+                            <input type="text" id="updateItemName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateItemQty">Quantity:</label>
+                            <input type="number" id="updateItemQty" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateItemPrice">Price:</label>
+                            <input type="number" id="updateItemPrice" class="form-control" required step="0.01">
+                        </div>
+                        <button type="submit" class="btn btn-success">Update Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-4">
+        <p>Hemanth Reddy-2211cs40138.</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            // Smooth scrolling for navigation links
+            $('a.nav-link').on('click', function(event) {
+                event.preventDefault(); // Prevent the default anchor click behavior
+
+                const target = $(this).attr('href'); // Get the target section
+                $('html, body').animate({
+                    scrollTop: $(target).offset().top - 70 // Scroll to the target section
+                }, 800); // Adjust the duration as needed
+            });
+        });
+    </script>
+</body>
+
+</html>

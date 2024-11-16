@@ -1,0 +1,234 @@
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styles */
+header {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 20px 0; /* Padding for header */
+    text-align: center;
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* Navigation styles */
+nav {
+    margin-top: 0; /* Remove top margin to ensure no space */
+    padding: 10px 0; /* Increased padding for a taller navbar */
+    background-color: #007bff; /* Ensure consistent background */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Increase distance between navbar and heading */
+#welcome {
+    margin-top: 60px; /* Adjust this value as needed */
+}
+
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Section styles */
+h2 {
+    margin-top: 30px; /* Adjust margin-top to increase space below navbar */
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+h3 {
+    color: #007bff;
+    margin-top: 20px;
+}
+
+/* Form styles */
+form {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+/* Styles for the search input */
+#searchInput {
+    margin-bottom: 20px; /* Space below the search input */
+    border: 1px solid #007bff; /* Give the input a blue border */
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Highlighting matched text */
+.highlight {
+    background-color: yellow; /* Change this color to suit your theme */
+    font-weight: bold; /* Makes the matched text stand out */
+}
+
+/* Button styles */
+button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Loading indicator styles */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 4px solid #007bff;
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Animation for the spinner */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Table styles */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table th {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Footer styles */
+footer {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 15px 0;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    nav ul li {
+        display: block;
+        margin: 5px 0;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        padding: 8px;
+    }
+
+    button {
+        padding: 8px 12px;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+    }
+}
+
+/* Toastr custom styles */
+.toastr {
+    z-index: 9999; /* Make sure toastr appears on top */
+}
+
+/* Responsive styles for search input */
+@media (max-width: 768px) {
+    #searchInput {
+        padding: 8px; /* Responsive padding */
+    }
+}
+
+/* Stock Out Warnings */
+#stockOutWarnings {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
